@@ -1,0 +1,2 @@
+rootProject.name = "CSTI-1780-4280"
+include ':app'
