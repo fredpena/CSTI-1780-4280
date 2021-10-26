@@ -61,7 +61,18 @@ public class UserSession {
             // Staring Login Activity
             context.startActivity(intent);
         }
+    }
 
+    /**
+     * Quick check for logout
+     **/
+    public void logout() {
+        // Storing login value as TRUE
+        editor.putBoolean(IS_LOGIN, false);
+
+        editor.putString(USER, null);
+        // commit changes
+        editor.commit();
     }
 
     /**

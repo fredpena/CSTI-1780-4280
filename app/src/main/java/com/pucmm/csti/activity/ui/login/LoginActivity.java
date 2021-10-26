@@ -1,6 +1,7 @@
 package com.pucmm.csti.activity.ui.login;
 
 import android.content.Intent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.pucmm.csti.R;
+import com.pucmm.csti.clazz.TestActivity;
 import com.pucmm.csti.data.dao.UserDataBase;
 import com.pucmm.csti.databinding.ActivityLoginBinding;
 import com.pucmm.csti.utils.UserSession;
@@ -34,13 +36,22 @@ public class LoginActivity extends AppCompatActivity {
 
         session = new UserSession(getApplicationContext());
 
+
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
         final Button loginButton = binding.login;
         final ProgressBar loadingProgressBar = binding.loading;
 
-        UserDataBase userDataBase = UserDataBase.getInstance(this);
-        System.out.println(userDataBase.userDao().getAll());
+        binding.login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.err.println("createLoginSession");
+                session.createLoginSession("f.pena");
+            }
+        });
+
+       // UserDataBase userDataBase = UserDataBase.getInstance(this);
+      //  System.out.println(userDataBase.userDao().getAll());
 
     }
 
