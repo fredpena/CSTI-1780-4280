@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FFBB86FC</color>
-    <color name="colorPrimaryVariant">#FF6200EE</color>
+    <color name="colorPrimary">#3377fb</color>
+    <color name="colorPrimaryVariant">#0055FA</color>
     <color name="colorOnPrimary">#ffffff</color>
 
-    <color name="colorSecondary">#03dac5</color>
-    <color name="colorSecondaryVariant">#018786</color>
+    <color name="colorSecondary">#ff3f33</color>
+    <color name="colorSecondaryVariant">#ff0f00</color>
     <color name="colorOnSecondary">#000000</color>
 
-    <color name="colorPrimaryDark">#FF3700B3</color>
+    <color name="colorPrimaryDark">#003396</color>
+    <color name="colorWhiteDark">#cfd8dc</color>
 
     <color name="black_overlay">#66000000</color>
     <color name="light_grey">#cccccc</color>
-    <color name="startColor">#5800d6</color>
-    <color name="endColor">#a166f5</color>
+    <color name="startColor">#00194b</color>
+    <color name="endColor">#6699fc</color>
 </resources>
+
+

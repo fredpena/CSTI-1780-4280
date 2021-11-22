@@ -12,7 +12,7 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:background="@color/gradient_background"
-        tools:context=".activity.SplashActivity">
+        tools:context=".demo.activity.SplashActivity">
 
     <RelativeLayout
             android:layout_width="match_parent"

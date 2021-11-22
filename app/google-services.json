@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "665310148450",
+    "firebase_url": "https://e-commerce-addaa.firebaseio.com",
+    "project_id": "e-commerce-addaa",
+    "storage_bucket": "e-commerce-addaa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:665310148450:android:3de4149f239f43eb031e3b",
+        "android_client_info": {
+          "package_name": "com.pucmm.csti"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "665310148450-spa1k3v6vboo7eb3l11kr513ssaq14jn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvBgUQZMpVRyI6e2oBmL9WpiH0KTix8Ss"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "665310148450-spa1k3v6vboo7eb3l11kr513ssaq14jn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

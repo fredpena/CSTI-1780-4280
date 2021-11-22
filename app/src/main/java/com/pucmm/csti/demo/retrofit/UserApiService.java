@@ -1,5 +1,8 @@
-package com.pucmm.csti.retrofit;
+package com.pucmm.csti.demo.retrofit;
 
+import com.google.gson.JsonObject;
+import com.pucmm.csti.demo.model.Userr;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -23,5 +26,5 @@ public interface UserApiService {
     Call<Void> changePassword(@Body Userr user);
 
     @POST("users/login")
-    Call<Userr> login(@Body Userr user);
+    Call<Userr> login(@Body JsonObject user);
 }

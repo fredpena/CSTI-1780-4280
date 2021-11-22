@@ -1,9 +1,9 @@
-package com.pucmm.csti.utils;
+package com.pucmm.csti.demo.utils;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import com.pucmm.csti.activity.ui.login.LoginActivity;
+import com.pucmm.csti.demo.activity.LoginActivity;
 
 public class UserSession {
 

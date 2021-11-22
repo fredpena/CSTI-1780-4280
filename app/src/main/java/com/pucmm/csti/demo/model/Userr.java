@@ -1,4 +1,4 @@
-package com.pucmm.csti.retrofit;
+package com.pucmm.csti.demo.model;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class Userr implements Serializable {
 
-    enum ROL {SELLER, CUSTOMER}
+    public enum ROL {SELLER, CUSTOMER}
 
     public int uid;
     public String firstName;
@@ -15,7 +15,7 @@ public class Userr implements Serializable {
     public String password;
     public ROL rol;
     public String contact;
-    public Date birthday;
+    public String birthday;
     public String photo;
 
     public  Userr() {
@@ -84,11 +84,11 @@ public class Userr implements Serializable {
         return this;
     }
 
-    public Date getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
-    public Userr setBirthday(Date birthday) {
+    public Userr setBirthday(String birthday) {
         this.birthday = birthday;
         return this;
     }

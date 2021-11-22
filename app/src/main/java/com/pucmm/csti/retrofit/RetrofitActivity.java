@@ -1,18 +1,18 @@
 package com.pucmm.csti.retrofit;
 
-import android.view.View;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.google.gson.*;
 import com.pucmm.csti.R;
+import com.pucmm.csti.demo.model.Userr;
+import com.pucmm.csti.demo.retrofit.UserApiService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
