@@ -45,7 +45,7 @@ public class SplashActivity extends AppCompatActivity {
                     }
                 });
 
-        //        firebaseAuth.createUserWithEmailAndPassword(email, password)
+//          firebaseAuth.createUserWithEmailAndPassword(email, password)
 //                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
 //                    @Override
 //                    public void onComplete(@NonNull Task<AuthResult> task) {

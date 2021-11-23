@@ -20,29 +20,20 @@
             android:theme="@style/AppTheme">
         <activity android:name=".demo.activity.MainActivity">
         </activity>
-        <activity
-                android:name=".demo.activity.ForgotPasswordActivity"
-                android:theme="@style/Theme.AppCompat.NoActionBar"
-                android:windowSoftInputMode="stateHidden">
+        <activity android:name=".demo.activity.ForgotPasswordActivity">
         </activity>
-        <activity
-                android:name=".demo.activity.RegisterActivity"
-                android:theme="@style/Theme.AppCompat.NoActionBar"
-                android:windowSoftInputMode="stateHidden">
+        <activity android:name=".demo.activity.RegisterActivity">
         </activity>
-        <activity
-                android:name=".demo.activity.LoginActivity"
-                android:theme="@style/Theme.AppCompat.NoActionBar"
-                android:windowSoftInputMode="stateHidden">
+        <activity android:name=".demo.activity.LoginActivity">
         </activity>
         <activity android:name=".demo.activity.SplashActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
-        <activity android:name=".retrofit.RetrofitActivity">
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN"/> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER"/> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity android:name=".roomviewmodel.activities.EditRoomActivity">
         </activity>

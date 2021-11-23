@@ -33,6 +33,7 @@ android {
 }
 
 dependencies {
+
     def room_version = "2.3.0"
     def life_cycle_version = "2.3.1"
     def retrofit_version = "2.9.0"
@@ -41,8 +42,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     implementation 'com.airbnb.android:lottie:4.2.0'
-    implementation 'com.kaopiz:kprogresshud:1.2.0'
-    implementation 'com.mikhaellopez:circularimageview:4.3.0'
+
 
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
@@ -53,9 +53,13 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
 
-    implementation 'com.google.firebase:firebase-core:17.2.1'
-    implementation 'com.google.firebase:firebase-auth:19.1.0'
-    implementation 'com.google.firebase:firebase-storage:19.1.0'
+    implementation 'com.google.firebase:firebase-core:20.0.0'
+    implementation 'com.google.firebase:firebase-storage:20.0.0'
+    implementation 'com.google.firebase:firebase-auth:21.0.1'
+
+    implementation 'io.github.shashank02051997:FancyToast:2.0.1'
+    implementation 'com.kaopiz:kprogresshud:1.2.0'
+    implementation 'com.mikhaellopez:circularimageview:4.3.0'
 
 }
 

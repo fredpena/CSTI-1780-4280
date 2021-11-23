@@ -1,13 +1,15 @@
 package com.pucmm.csti.demo.activity;
 
 import android.content.Intent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonObject;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.pucmm.csti.R;
@@ -17,6 +19,7 @@ import com.pucmm.csti.demo.retrofit.UserApiService;
 import com.pucmm.csti.demo.utils.ConstantsUtil;
 import com.pucmm.csti.demo.utils.UserSession;
 import com.pucmm.csti.demo.utils.ValidUtil;
+import com.shashank.sony.fancytoastlib.FancyToast;
 import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,6 +28,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -92,9 +99,12 @@ public class LoginActivity extends AppCompatActivity {
             user.addProperty("email", binding.email.getText().toString().trim());
             user.addProperty("password", binding.password.getText().toString().trim());
 
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            gsonBuilder.registerTypeAdapter(Userr.class, dateJsonDeserializer);
+
             final Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(ConstantsUtil.BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gsonBuilder.create()))
                     .build();
 
             final Call<Userr> userCall = retrofit.create(UserApiService.class).login(user);
@@ -104,15 +114,15 @@ public class LoginActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                     switch (response.code()) {
                         case 200:
-                            Toast.makeText(LoginActivity.this, "Successfully login", Toast.LENGTH_SHORT).show();
+                            session.createLoginSession(response.body());
 
+                            FancyToast.makeText(LoginActivity.this, "Successfully login", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             finish();
-
                             break;
                         default:
                             try {
-                                Toast.makeText(LoginActivity.this, response.errorBody().string(), Toast.LENGTH_SHORT).show();
+                                FancyToast.makeText(LoginActivity.this, response.errorBody().string(), FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -122,11 +132,27 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<Userr> call, Throwable error) {
                     progressDialog.dismiss();
-
-                    Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    FancyToast.makeText(LoginActivity.this, error.getMessage(), FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
                 }
             });
         }
     }
+
+    private final JsonDeserializer<Userr> dateJsonDeserializer = (json, typeOfT, context) -> {
+        final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+
+        final JsonObject jo = (JsonObject) json;
+
+        return new Userr()
+                .setUid(jo.get("uid").getAsInt())
+                .setFirstName(jo.get("firstName").getAsString())
+                .setLastName(jo.get("lastName").getAsString())
+                .setEmail(jo.get("email").getAsString())
+                .setRol(Userr.ROL.valueOf(jo.get("rol").getAsString()))
+                .setContact(jo.get("contact").getAsString())
+                .setPhoto(jo.get("photo").getAsString())
+                .setBirthday(dateFormat.format(new Date(jo.get("birthday").getAsLong())));
+    };
 
 }

@@ -16,10 +16,12 @@ import com.kaopiz.kprogresshud.KProgressHUD;
 import com.pucmm.csti.R;
 import com.pucmm.csti.databinding.ActivityRegisterBinding;
 import com.pucmm.csti.demo.model.Userr;
+import com.pucmm.csti.demo.networksync.FirebaseNetwork;
+import com.pucmm.csti.demo.networksync.NetResponse;
 import com.pucmm.csti.demo.retrofit.UserApiService;
 import com.pucmm.csti.demo.utils.ConstantsUtil;
 import com.pucmm.csti.demo.utils.ValidUtil;
-import okhttp3.ResponseBody;
+import com.shashank.sony.fancytoastlib.FancyToast;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,12 +34,12 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.function.Consumer;
 
 public class RegisterActivity extends AppCompatActivity {
 
     // UI references.
     private ActivityRegisterBinding binding;
-    private boolean profileDefault = true;
     private Uri uri;
 
 
@@ -75,7 +77,6 @@ public class RegisterActivity extends AppCompatActivity {
         binding.register.setOnClickListener(view -> attemptRegister());
 
         binding.profile.setOnClickListener(v -> {
-            profileDefault = true;
             Intent intent = new Intent();
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -86,7 +87,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void attemptRegister() {
-
         if (ValidUtil.isEmpty(this, this.binding.firstName, this.binding.lastName, this.binding.email, this.binding.password, this.binding.repeatPassword, this.binding.rol)) {
             return;
         }
@@ -112,7 +112,6 @@ public class RegisterActivity extends AppCompatActivity {
                     .show();
 
             final Userr user = new Userr()
-                    //.setUid(11)
                     .setFirstName(binding.firstName.getText().toString().trim())
                     .setLastName(binding.lastName.getText().toString().trim())
                     .setEmail(binding.email.getText().toString().trim())
@@ -126,35 +125,88 @@ public class RegisterActivity extends AppCompatActivity {
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
-            final Call<Userr> userCall = retrofit.create(UserApiService.class).create(user);
-            userCall.enqueue(new Callback<Userr>() {
-                @Override
-                public void onResponse(Call<Userr> call, Response<Userr> response) {
-                    progressDialog.dismiss();
-                    switch (response.code()) {
-                        case 201:
-                            Toast.makeText(RegisterActivity.this, "Successfully registered", Toast.LENGTH_SHORT).show();
-                            break;
-                        default:
-                            try {
-                                Toast.makeText(RegisterActivity.this, response.errorBody().string(), Toast.LENGTH_SHORT).show();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+            final Call<Userr> userCreateCall = retrofit.create(UserApiService.class).create(user);
 
-                    }
+            call(userCreateCall, error -> {
+                if (error) {
+                    progressDialog.dismiss();
+                    return;
                 }
 
-                @Override
-                public void onFailure(Call<Userr> call, Throwable error) {
-                    progressDialog.dismiss();
+                FirebaseNetwork.obtain().upload(uri, String.format("profile/%s.jpg", user.getUid()),
+                        new NetResponse<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                FancyToast.makeText(RegisterActivity.this, "Successfully upload image", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
 
-                    Toast.makeText(RegisterActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                                user.setPhoto(response);
+                                final Call<Userr> userUpdateCall = retrofit.create(UserApiService.class).update(user);
+
+                                call(userUpdateCall, res1 -> progressDialog.dismiss());
+                            }
+
+                            @Override
+                            public void onFailure(Throwable t) {
+                                progressDialog.dismiss();
+                                FancyToast.makeText(RegisterActivity.this, t.getMessage(), FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
+                            }
+                        });
+            });
+        }
+    }
+
+    private void call(Call<Userr> call, Consumer<Boolean> error) {
+        call.enqueue(new Callback<Userr>() {
+            @Override
+            public void onResponse(Call<Userr> call, Response<Userr> response) {
+                switch (response.code()) {
+                    case 201:
+                        FancyToast.makeText(RegisterActivity.this, "Successfully registered", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
+                        error.accept(false);
+                        break;
+                    case 204:
+                        FancyToast.makeText(RegisterActivity.this, "Successfully updated", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
+                        error.accept(false);
+                        break;
+                    default:
+                        try {
+                            error.accept(true);
+                            FancyToast.makeText(RegisterActivity.this, response.errorBody().string(), FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Userr> call, Throwable t) {
+                error.accept(true);
+                FancyToast.makeText(RegisterActivity.this, t.getMessage(), FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
+                //Toast.makeText(RegisterActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+
+    private ActivityResultLauncher<Intent> imageResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        try {
+                            uri = result.getData().getData();
+                            InputStream inputStream = getContentResolver().openInputStream(uri);
+                            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+
+                            binding.profile.setImageBitmap(bitmap);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             });
 
-        }
-    }
 
     private String getBirthday(DatePicker datePicker) {
         final int day = datePicker.getDayOfMonth();
@@ -168,24 +220,5 @@ public class RegisterActivity extends AppCompatActivity {
 
         return dateFormat.format(calendar.getTime());
     }
-
-    private ActivityResultLauncher<Intent> imageResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        try {
-                            uri = result.getData().getData();
-                            InputStream inputStream = getContentResolver().openInputStream(uri);
-                            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-
-                            binding.profile.setImageBitmap(bitmap);
-                            profileDefault = false;
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            });
 
 }

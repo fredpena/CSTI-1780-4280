@@ -11,7 +11,6 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-        android:background="@color/gradient_background"
         tools:context=".demo.activity.RegisterActivity">
 
 
@@ -35,7 +34,7 @@
 
             <TextView
                     android:layout_marginTop="10dp"
-                    android:textColor="#fff"
+                    android:textColor="@color/colorPrimaryVariant"
                     android:textSize="45sp"
                     android:id="@+id/appName"
                     android:layout_width="wrap_content"
@@ -50,11 +49,11 @@
                     android:layout_width="250dp"
                     android:layout_height="250dp"
                     android:src="@drawable/ic_person_default"
-                    app:civ_border_color="#3f51b5"
+                    app:civ_border_color="@color/colorWhiteDark"
                     app:civ_border_width="4dp"
                     app:civ_shadow="true"
                     app:civ_shadow_radius="10dp"
-                    app:civ_shadow_color="#3f51b5"/>
+                    app:civ_shadow_color="@color/colorWhiteDark"/>
 
             <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
@@ -65,6 +64,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_first_name"
+                        android:background="@color/colorOnPrimary"
                         android:inputType="text"
                         android:maxLines="1"
                         android:singleLine="true"/>
@@ -80,6 +80,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_last_name"
+                        android:background="@color/colorOnPrimary"
                         android:inputType="text"
                         android:maxLines="1"
                         android:singleLine="true"/>
@@ -95,6 +96,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_email"
+                        android:background="@color/colorOnPrimary"
                         android:inputType="textEmailAddress"
                         android:maxLines="1"
                         android:singleLine="true"/>
@@ -110,6 +112,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_password"
+                        android:background="@color/colorOnPrimary"
                         android:inputType="textPassword"
                         android:maxLines="1"
                         android:singleLine="true"/>
@@ -125,6 +128,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_repeat_password"
+                        android:background="@color/colorOnPrimary"
                         android:inputType="textPassword"
                         android:maxLines="1"
                         android:singleLine="true"/>
@@ -135,13 +139,20 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/filter_spinner_dropdown_bg"
+                    app:boxBackgroundColor="@color/colorOnPrimary"
                     android:hint="@string/prompt_rol">
 
                 <AutoCompleteTextView
                         android:id="@+id/rol"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="none"/>
+                        android:background="@null"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:inputType="none"
+                        tools:ignore="LabelFor"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -154,6 +165,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_contact"
+                        android:background="@color/colorOnPrimary"
                         android:inputType="text"
                         android:maxLines="1"
                         android:singleLine="true"/>
@@ -170,6 +182,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_birthday"
+                        android:background="@color/colorOnPrimary"
                         android:inputType="date"
                         android:layout_centerHorizontal="true"
                         android:datePickerMode="spinner"
@@ -207,13 +220,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/btn_forgot"
-                        style="@style/buttons"/>
+                        style="@style/AppTheme.RoundedCornerMaterialTextView"/>
 
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="|"
-                        style="@style/buttons"
+                        style="@style/AppTheme.RoundedCornerMaterialTextView"
                         android:textStyle="bold"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"/>
@@ -222,7 +235,7 @@
                         android:id="@+id/login"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/buttons"
+                        style="@style/AppTheme.RoundedCornerMaterialTextView"
                         android:text="@string/btn_login_now"/>
 
             </LinearLayout>

@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.pucmm.csti.R;
 import com.pucmm.csti.databinding.ActivityForgotPasswordBinding;
-import com.pucmm.csti.databinding.ActivityRegisterBinding;
+
 
 public class ForgotPasswordActivity extends AppCompatActivity {
 

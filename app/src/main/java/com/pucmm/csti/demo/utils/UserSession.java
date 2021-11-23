@@ -3,7 +3,9 @@ package com.pucmm.csti.demo.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import com.google.gson.Gson;
 import com.pucmm.csti.demo.activity.LoginActivity;
+import com.pucmm.csti.demo.model.Userr;
 
 public class UserSession {
 
@@ -33,11 +35,10 @@ public class UserSession {
     /**
      * Create login session
      */
-    public void createLoginSession(final String userId) {
+    public void createLoginSession(final Userr user) {
         // Storing login value as TRUE
         editor.putBoolean(IS_LOGIN, true);
-
-        editor.putString(USER, userId);
+        editor.putString(USER, new Gson().toJson(user));
         // commit changes
         editor.commit();
     }

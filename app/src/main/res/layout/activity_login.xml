@@ -11,7 +11,6 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-        android:background="@color/gradient_background"
         tools:context=".demo.activity.LoginActivity">
 
     <ScrollView
@@ -37,7 +36,7 @@
 
             <TextView
                     android:layout_marginTop="10dp"
-                    android:textColor="#fff"
+                    android:textColor="@color/colorPrimaryVariant"
                     android:textSize="45sp"
                     android:id="@+id/appName"
                     android:layout_width="wrap_content"
@@ -56,6 +55,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_email"
+                        android:background="@color/colorOnPrimary"
                         android:inputType="textEmailAddress"
                         android:maxLines="1"
                         android:singleLine="true"/>
@@ -71,6 +71,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_password"
+                        android:background="@color/colorOnPrimary"
                         android:imeActionId="6"
                         android:imeActionLabel="@string/action_sign_in_short"
                         android:imeOptions="actionUnspecified"
@@ -92,7 +93,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/login_button"
                         android:text="@string/btn_login"
-                        style="@style/AppTheme.RoundedCornerMaterialButton"/>
+                        style="@style/AppTheme.RoundedCornerMaterialButtonCheckout"/>
 
             </LinearLayout>
 
@@ -108,13 +109,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/btn_forgot"
-                        style="@style/buttons"/>
+                        style="@style/AppTheme.RoundedCornerMaterialTextView"/>
 
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="|"
-                        style="@style/buttons"
+                        style="@style/AppTheme.RoundedCornerMaterialTextView"
                         android:textStyle="bold"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"/>
@@ -123,8 +124,8 @@
                         android:id="@+id/register_now"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/buttons"
-                        android:text="@string/btn_register_now"/>
+                        android:text="@string/btn_register_now"
+                        style="@style/AppTheme.RoundedCornerMaterialTextView"/>
 
             </LinearLayout>
 
