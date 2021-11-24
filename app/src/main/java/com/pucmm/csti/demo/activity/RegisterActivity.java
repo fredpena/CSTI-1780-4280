@@ -43,6 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
     private Uri uri;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

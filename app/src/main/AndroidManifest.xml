@@ -18,7 +18,8 @@
             android:networkSecurityConfig="@xml/network_security_config"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".demo.activity.MainActivity">
+        <activity android:name=".demo.activity.MainActivity"
+                  android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity android:name=".demo.activity.ForgotPasswordActivity">
         </activity>
@@ -27,14 +28,12 @@
         <activity android:name=".demo.activity.LoginActivity">
         </activity>
         <activity android:name=".demo.activity.SplashActivity">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN"/> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER"/> -->
-            <!-- </intent-filter> -->
+             <intent-filter>
+             <action android:name="android.intent.action.MAIN"/>
+             <category android:name="android.intent.category.LAUNCHER"/>
+             </intent-filter>
         </activity>
+
         <activity android:name=".roomviewmodel.activities.EditRoomActivity">
         </activity>
         <activity android:name=".roomviewmodel.activities.MainRoomActivity">

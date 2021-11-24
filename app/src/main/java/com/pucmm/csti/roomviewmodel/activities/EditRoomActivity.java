@@ -2,18 +2,14 @@ package com.pucmm.csti.roomviewmodel.activities;
 
 import android.content.Intent;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import com.pucmm.csti.R;
 import com.pucmm.csti.databinding.ActivityEditRoomBinding;
 import com.pucmm.csti.roomviewmodel.constants.Constants;
-import com.pucmm.csti.roomviewmodel.database.AppDataBase;
-import com.pucmm.csti.roomviewmodel.database.AppExecutors;
 import com.pucmm.csti.roomviewmodel.database.PersonDao;
 import com.pucmm.csti.roomviewmodel.model.Person;
 
@@ -30,25 +26,25 @@ public class EditRoomActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = ActivityEditRoomBinding.inflate(getLayoutInflater());
-        setContentView(mBinding.getRoot());
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        personDao = AppDataBase.getInstance(getApplicationContext()).personDao();
-        intent = getIntent();
-
-        personId = intent.getIntExtra(Constants.UPDATE_PERSON, -1);
-
-        initViews();
-
-        if (personId != -1) {
-            save.setText("UPDATE");
-            AppExecutors.getInstance().diskIO().execute(() -> {
-                Person person = personDao.find(personId);
-                populateUI(person);
-            });
-        }
+//        mBinding = ActivityEditRoomBinding.inflate(getLayoutInflater());
+//        setContentView(mBinding.getRoot());
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+//
+//        personDao = AppDataBase.getInstance(getApplicationContext()).personDao();
+//        intent = getIntent();
+//
+//        personId = intent.getIntExtra(Constants.UPDATE_PERSON, -1);
+//
+//        initViews();
+//
+//        if (personId != -1) {
+//            save.setText("UPDATE");
+//            AppExecutors.getInstance().diskIO().execute(() -> {
+//                Person person = personDao.find(personId);
+//                populateUI(person);
+//            });
+//        }
 
 
     }
@@ -76,19 +72,19 @@ public class EditRoomActivity extends AppCompatActivity {
     }
 
     private void onSaveButtonClicked() {
-        Person person = new Person(name.getText().toString().trim(), email.getText().toString().trim(),
-                number.getText().toString().trim(), Integer.valueOf(pinCode.getText().toString().trim()),
-                city.getText().toString().trim());
-
-        AppExecutors.getInstance().diskIO().execute(() -> {
-            if (intent.hasExtra(Constants.UPDATE_PERSON)) {
-                person.setId(personId);
-                personDao.update(person);
-            } else {
-                personDao.insert(person);
-            }
-            finish();
-        });
+//        Person person = new Person(name.getText().toString().trim(), email.getText().toString().trim(),
+//                number.getText().toString().trim(), Integer.valueOf(pinCode.getText().toString().trim()),
+//                city.getText().toString().trim());
+//
+//        AppExecutors.getInstance().diskIO().execute(() -> {
+//            if (intent.hasExtra(Constants.UPDATE_PERSON)) {
+//                person.setId(personId);
+//                personDao.update(person);
+//            } else {
+//                personDao.insert(person);
+//            }
+//            finish();
+//        });
     }
 
 

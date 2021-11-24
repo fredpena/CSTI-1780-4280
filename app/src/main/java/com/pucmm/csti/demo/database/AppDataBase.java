@@ -1,12 +1,12 @@
-package com.pucmm.csti.roomviewmodel.database;
+package com.pucmm.csti.demo.database;
 
 import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import com.pucmm.csti.roomviewmodel.model.Person;
+import com.pucmm.csti.demo.model.Category;
 
-@Database(entities = {Person.class}, version = 1)
+@Database(entities = {Category.class}, version = 1)
 public abstract class AppDataBase extends RoomDatabase {
     private static final String DATABASE_NAME = "csti";
     private static final Object LOCK = new Object();
@@ -21,7 +21,7 @@ public abstract class AppDataBase extends RoomDatabase {
         return sIntance;
     }
 
-    public abstract PersonDao personDao();
+    public abstract CategoryDao categoryDao();
 
 
 }

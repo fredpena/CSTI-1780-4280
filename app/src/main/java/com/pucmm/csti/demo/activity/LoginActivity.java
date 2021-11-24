@@ -1,13 +1,9 @@
 package com.pucmm.csti.demo.activity;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonObject;
@@ -20,7 +16,6 @@ import com.pucmm.csti.demo.utils.ConstantsUtil;
 import com.pucmm.csti.demo.utils.UserSession;
 import com.pucmm.csti.demo.utils.ValidUtil;
 import com.shashank.sony.fancytoastlib.FancyToast;
-import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -53,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         session = new UserSession(getApplicationContext());
 
 
+        //binding.email.setText("linleon@gmail.com");
         binding.email.setText("fr.pena@ce.pucmm.edu.do");
         binding.password.setText("123456");
 

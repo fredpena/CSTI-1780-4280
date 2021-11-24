@@ -14,6 +14,7 @@
     <color name="black_overlay">#66000000</color>
     <color name="light_grey">#cccccc</color>
     <color name="startColor">#00194b</color>
+    <color name="centerColor">#334d7e</color>
     <color name="endColor">#6699fc</color>
     <color name="light_blue_600">#FF039BE5</color>
     <color name="light_blue_900">#FF01579B</color>

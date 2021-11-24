@@ -6,6 +6,10 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 import com.pucmm.csti.demo.activity.LoginActivity;
 import com.pucmm.csti.demo.model.Userr;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Objects;
 
 public class UserSession {
 
@@ -41,6 +45,15 @@ public class UserSession {
         editor.putString(USER, new Gson().toJson(user));
         // commit changes
         editor.commit();
+    }
+
+    /**
+     * Get stored session data
+     */
+    public Userr getUserSession() {
+        final String json= sharedPreferences.getString(USER, "{}");
+
+        return  new Gson().fromJson(json, Userr.class);
     }
 
     /**

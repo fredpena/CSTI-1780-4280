@@ -117,7 +117,7 @@ public class Userr implements Serializable {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "Userr{" +
                 "uid=" + uid +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
@@ -125,8 +125,8 @@ public class Userr implements Serializable {
                 ", password='" + password + '\'' +
                 ", rol=" + rol +
                 ", contact='" + contact + '\'' +
-                ", birthday=" + birthday +
+                ", birthday='" + birthday + '\'' +
+                ", photo='" + photo + '\'' +
                 '}';
     }
-
 }
