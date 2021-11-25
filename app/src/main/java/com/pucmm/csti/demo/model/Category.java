@@ -18,6 +18,9 @@ public class Category {
     @ColumnInfo(name = "photo")
     private String photo;
 
+    public Category() {
+    }
+
     @Ignore
     public Category(String name, boolean active, String photo) {
         this.name = name;
@@ -62,5 +65,15 @@ public class Category {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "uid=" + uid +
+                ", name='" + name + '\'' +
+                ", active=" + active +
+                ", photo='" + photo + '\'' +
+                '}';
     }
 }

@@ -17,7 +17,7 @@ public interface CategoryDao {
     @Query("SELECT * FROM category WHERE uid = :uid")
     Category find(int uid);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Category category);
 
     @Update

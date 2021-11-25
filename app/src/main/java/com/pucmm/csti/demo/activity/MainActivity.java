@@ -1,11 +1,14 @@
 package com.pucmm.csti.demo.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.core.view.GravityCompat;
@@ -23,6 +26,7 @@ import com.pucmm.csti.demo.model.Userr;
 import com.pucmm.csti.demo.networksync.FirebaseNetwork;
 import com.pucmm.csti.demo.networksync.NetResponse;
 import com.pucmm.csti.demo.utils.UserSession;
+import org.jetbrains.annotations.NotNull;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -52,8 +55,9 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_category)//, R.id.nav_gallery, R.id.nav_slideshow
-                .setDrawerLayout(drawer)
+                R.id.nav_home, R.id.nav_category)
+                .setOpenableLayout(drawer)//, R.id.nav_gallery, R.id.nav_slideshow
+                //.setDrawerLayout(drawer)
                 .build();
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -130,4 +134,5 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
 }

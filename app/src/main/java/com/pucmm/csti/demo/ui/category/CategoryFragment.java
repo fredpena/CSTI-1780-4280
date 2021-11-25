@@ -48,17 +48,9 @@ public class CategoryFragment extends Fragment {
         binding = FragmentCategoryBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavHostFragment.findNavController(CategoryFragment.this)
-                        .navigate(R.id.action_nav_category_to_nav_category_man);
-//                getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.container, MainFragment.newInstance())
-//                        .commitNow();
-                //CategoryFragmentManager
-            }
-        });
+        binding.fab.setOnClickListener(v -> NavHostFragment.findNavController(CategoryFragment.this)
+                .navigate(R.id.action_nav_category_to_nav_category_man));
+
         if (!this.user.getRol().equals(Userr.ROL.SELLER)) {
             binding.fab.setVisibility(View.INVISIBLE);
         }

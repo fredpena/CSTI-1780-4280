@@ -13,6 +13,7 @@ import com.pucmm.csti.databinding.ActivityLoginBinding;
 import com.pucmm.csti.demo.model.Userr;
 import com.pucmm.csti.demo.retrofit.UserApiService;
 import com.pucmm.csti.demo.utils.ConstantsUtil;
+import com.pucmm.csti.demo.utils.KProgressHUDUtils;
 import com.pucmm.csti.demo.utils.UserSession;
 import com.pucmm.csti.demo.utils.ValidUtil;
 import com.shashank.sony.fancytoastlib.FancyToast;
@@ -82,14 +83,7 @@ public class LoginActivity extends AppCompatActivity {
         final String password = this.binding.password.getText().toString();
 
         if (ValidUtil.isEmailValid(this.binding.email, email) && ValidUtil.isPasswordValid(this.binding.password, password)) {
-            final KProgressHUD progressDialog = KProgressHUD.create(LoginActivity.this)
-                    .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                    .setLabel(getString(R.string.please_wait))
-                    .setDetailsLabel(getString(R.string.authenticating))
-                    .setCancellable(false)
-                    .setAnimationSpeed(2)
-                    .setDimAmount(0.5f)
-                    .show();
+            final KProgressHUD progressDialog = new KProgressHUDUtils(this).showAuthenticating();
 
             final JsonObject user = new JsonObject();
             user.addProperty("email", binding.email.getText().toString().trim());

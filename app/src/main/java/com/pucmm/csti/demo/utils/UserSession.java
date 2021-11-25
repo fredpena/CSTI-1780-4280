@@ -51,9 +51,9 @@ public class UserSession {
      * Get stored session data
      */
     public Userr getUserSession() {
-        final String json= sharedPreferences.getString(USER, "{}");
+        final String json = sharedPreferences.getString(USER, "{}");
 
-        return  new Gson().fromJson(json, Userr.class);
+        return new Gson().fromJson(json, Userr.class);
     }
 
     /**
@@ -97,4 +97,10 @@ public class UserSession {
         return sharedPreferences.getBoolean(IS_LOGIN, false);
     }
 
+    public void logoutUser() {
+        // Clearing all data from Shared Preferences
+        editor.putBoolean(IS_LOGIN, false);
+        editor.clear();
+        editor.commit();
+    }
 }
