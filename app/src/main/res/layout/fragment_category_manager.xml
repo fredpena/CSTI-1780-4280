@@ -11,7 +11,7 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-        tools:context=".demo.ui.category.CategoryFragmentManager">
+        tools:context=".ui.category.CategoryFragmentManager">
 
     <ScrollView
             android:layout_width="match_parent"
@@ -88,13 +88,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="|"
-                        android:textSize="30dp"
+                        android:textAlignment="center"
                         android:gravity="center|bottom"
                         style="@style/AppTheme.RoundedCornerMaterialTextView"
                         android:textStyle="bold"
                         android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"/>
-
+                        android:layout_marginRight="10dp" android:textSize="25sp"/>
                 <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
