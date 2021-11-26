@@ -1,6 +1,7 @@
 package com.pucmm.csti.demo.ui.category;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -24,6 +25,7 @@ import com.kaopiz.kprogresshud.KProgressHUD;
 import com.pucmm.csti.R;
 import com.pucmm.csti.databinding.FragmentCategoryBinding;
 import com.pucmm.csti.databinding.FragmentCategoryManagerBinding;
+import com.pucmm.csti.demo.activity.RegisterActivity;
 import com.pucmm.csti.demo.database.AppDataBase;
 import com.pucmm.csti.demo.database.AppExecutors;
 import com.pucmm.csti.demo.database.CategoryDao;
@@ -31,31 +33,27 @@ import com.pucmm.csti.demo.model.Category;
 import com.pucmm.csti.demo.model.Userr;
 import com.pucmm.csti.demo.networksync.FirebaseNetwork;
 import com.pucmm.csti.demo.networksync.NetResponse;
+import com.pucmm.csti.demo.retrofit.UserApiService;
 import com.pucmm.csti.demo.utils.*;
 import com.pucmm.csti.roomviewmodel.database.PersonDao;
 import com.pucmm.csti.roomviewmodel.model.Person;
+import com.shashank.sony.fancytoastlib.FancyToast;
 import org.jetbrains.annotations.NotNull;
+import retrofit2.Call;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.function.Consumer;
 
 
 public class CategoryFragmentManager extends Fragment {
 
     private static final String TAG = "CategoryFragmentManager";
-    private static final int PICK_IMAGE = 1;
-    private static final int CHOOSE_GALLERY = 2;
-    private static final int TAKE_PHOTO = 3;
 
     private FragmentCategoryManagerBinding binding;
-    private Category element;
-
     private Uri uri;
-
-    //to get user session data
-    private UserSession session;
-    private Userr user;
+    private Category element;
     private CategoryDao categoryDao;
 
     @Override
@@ -64,21 +62,16 @@ public class CategoryFragmentManager extends Fragment {
 
         categoryDao = AppDataBase.getInstance(getContext()).categoryDao();
 
-        System.out.println("categoryDao");
-        categoryDao.findAll().observe(this, new Observer<List<Category>>() {
-            @Override
-            public void onChanged(List<Category> people) {
-                people.forEach(System.out::println);
-            }
-        });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentCategoryManagerBinding.inflate(inflater, container, false);
+        binding.active.setChecked(true);
         View root = binding.getRoot();
 
+        element = (Category) getArguments().getSerializable(ConstantsUtil.CATEGORY);
 
         return root;
     }
@@ -91,30 +84,54 @@ public class CategoryFragmentManager extends Fragment {
         if (element != null) {
             binding.name.setText(element.getName());
             binding.active.setChecked(element.isActive());
-            FirebaseNetwork.obtain().download(element.getPhoto(), new NetResponse<Bitmap>() {
-                @Override
-                public void onResponse(Bitmap response) {
-                    binding.avatar.setImageBitmap(response);
-                }
 
-                @Override
-                public void onFailure(Throwable t) {
-                    Log.e(TAG, t.getMessage());
-                }
-            });
+            if (element.getPhoto() != null && !element.getPhoto().isEmpty()) {
+                FirebaseNetwork.obtain().download(element.getPhoto(), new NetResponse<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap response) {
+                        binding.avatar.setImageBitmap(response);
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        Log.e(TAG, t.getMessage());
+                    }
+                });
+            }
+
         }
 
         binding.save.setOnClickListener(v -> {
             if (ValidUtil.isEmpty(getContext(), binding.name)) {
                 return;
             }
-            createOrUpdate();
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Confirm dialog save!")
+                    .setMessage("You are about to save record. Do you really want to proceed?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            createOrUpdate();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    }).show();
+
         });
 
         binding.back.setOnClickListener(v -> NavHostFragment.findNavController(CategoryFragmentManager.this)
                 .navigate(R.id.action_nav_category_man_to_nav_category));
 
-        binding.avatar.setOnClickListener(v -> photoOptions());
+        if (element != null && element.getUid() != 0) {
+            binding.avatar.setOnClickListener(v -> photoOptions());
+        } else {
+            binding.avatar.setOnClickListener(v -> FancyToast.makeText(getContext(), "You must create an object before assigning the photo", FancyToast.LENGTH_LONG, FancyToast.INFO, false).show());
+        }
     }
 
 
@@ -129,13 +146,42 @@ public class CategoryFragmentManager extends Fragment {
         final KProgressHUD progressDialog = new KProgressHUDUtils(getActivity()).showConnecting();
 
         AppExecutors.getInstance().diskIO().execute(() -> {
-            progressDialog.dismiss();
-            categoryDao.insert(element);
-
-            System.out.println("element: " + element.toString());
+            if (Integer.valueOf(element.getUid()).equals(0)) {
+                categoryDao.insert(element);
+            } else {
+                categoryDao.update(element);
+            }
+            consumer.accept(progressDialog);
         });
-
     }
+
+    private final Consumer<KProgressHUD> consumer = new Consumer<KProgressHUD>() {
+        @Override
+        public void accept(KProgressHUD progressDialog) {
+            if (element.getUid() != 0 && uri != null) {
+                FirebaseNetwork.obtain().upload(uri, String.format("category/%s.jpg", element.getUid()),
+                        new NetResponse<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                FancyToast.makeText(getContext(), "Successfully upload image", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
+                                element.setPhoto(response);
+                                AppExecutors.getInstance().diskIO().execute(() -> {
+                                    categoryDao.update(element);
+                                });
+                                progressDialog.dismiss();
+                            }
+
+                            @Override
+                            public void onFailure(Throwable t) {
+                                progressDialog.dismiss();
+                                FancyToast.makeText(getContext(), t.getMessage(), FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
+                            }
+                        });
+            } else {
+                progressDialog.dismiss();
+            }
+        }
+    };
 
     @Override
     public void onDestroyView() {
@@ -147,7 +193,7 @@ public class CategoryFragmentManager extends Fragment {
     private void photoOptions() {
         final CharSequence[] options = SystemProperties.getOptions();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Choose your category picture");
 
         builder.setItems(options, (dialog, item) -> {
@@ -204,10 +250,5 @@ public class CategoryFragmentManager extends Fragment {
                 }
             });
 
-    private void retrieveSession() {
-        //create new session object by passing application context
-        session = new UserSession(getContext());
-        //get User details if logged in
-        user = session.getUserSession();
-    }
+
 }

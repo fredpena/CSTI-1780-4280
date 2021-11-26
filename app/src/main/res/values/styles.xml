@@ -10,7 +10,7 @@
     </style>
 
     <style name="DialogAlert" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorPrimary">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/colorSecondary</item>
     </style>
 
     <style name="AppTheme.RoundedCornerMaterialButton" parent="Widget.MaterialComponents.Button">
