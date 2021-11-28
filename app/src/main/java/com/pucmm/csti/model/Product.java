@@ -5,13 +5,14 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "product")
-public class Product {
+import java.io.Serializable;
 
-    @PrimaryKey()
-    @NonNull
+@Entity(tableName = "product")
+public class Product implements Serializable {
+
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "itemCode")
-    private String itemCode;
+    private int itemCode;
     @ColumnInfo(name = "itemName")
     private String itemName;
     @ColumnInfo(name = "category")
@@ -24,11 +25,11 @@ public class Product {
     public Product() {
     }
 
-    public String getItemCode() {
+    public int getItemCode() {
         return itemCode;
     }
 
-    public void setItemCode(String itemCode) {
+    public void setItemCode(int itemCode) {
         this.itemCode = itemCode;
     }
 

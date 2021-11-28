@@ -34,6 +34,7 @@
     <string name="prompt_last_name">Last Name</string>
     <string name="prompt_contact">Enter Contact</string>
     <string name="prompt_rol">Rol</string>
+    <string name="prompt_category">Category</string>
     <string name="prompt_birthday">Enter Birthday</string>
     <string name="prompt_is_provider">Is Provider?</string>
     <string name="prompt_is_active">Is Active?</string>
@@ -51,6 +52,10 @@
     <string name="btn_register">Register</string>
     <string name="btn_save">Save</string>
     <string name="btn_login_now">Login Now</string>
+    <string name="btn_select">Select Multiple Images</string>
+    <string name="btn_previous">Previous</string>
+    <string name="btn_next">Next</string>
+    <string name="btn_delete">Delete</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

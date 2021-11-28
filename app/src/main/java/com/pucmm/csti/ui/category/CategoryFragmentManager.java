@@ -50,7 +50,6 @@ public class CategoryFragmentManager extends Fragment {
         super.onCreate(savedInstanceState);
 
         categoryDao = AppDataBase.getInstance(getContext()).categoryDao();
-
     }
 
     @Override
@@ -90,15 +89,9 @@ public class CategoryFragmentManager extends Fragment {
         binding.back.setOnClickListener(v -> NavHostFragment.findNavController(CategoryFragmentManager.this)
                 .navigate(R.id.action_nav_category_man_to_nav_category));
 
-        if (element != null && element.getUid() != 0) {
-            binding.avatar.setOnClickListener(v -> {
-                        photoOptions();
-
-                    }
-            );
-        } else {
-            binding.avatar.setOnClickListener(v -> FancyToast.makeText(getContext(), "You must create an object before assigning the photo", FancyToast.LENGTH_LONG, FancyToast.INFO, false).show());
-        }
+        binding.avatar.setOnClickListener(v -> {
+            photoOptions();
+        });
     }
 
 
@@ -114,39 +107,41 @@ public class CategoryFragmentManager extends Fragment {
 
         AppExecutors.getInstance().diskIO().execute(() -> {
             if (Integer.valueOf(element.getUid()).equals(0)) {
-                categoryDao.insert(element);
+                long uid = categoryDao.insert(element);
+                element.setUid((int) uid);
             } else {
                 categoryDao.update(element);
             }
-            consumer.accept(progressDialog);
+
+            if (uri != null && element.getUid() != 0) {
+                consumer.accept(progressDialog);
+            } else {
+                progressDialog.dismiss();
+            }
         });
     }
 
     private final Consumer<KProgressHUD> consumer = new Consumer<KProgressHUD>() {
         @Override
         public void accept(KProgressHUD progressDialog) {
-            if (element.getUid() != 0 && uri != null) {
-                FirebaseNetwork.obtain().upload(uri, String.format("category/%s.jpg", element.getUid()),
-                        new NetResponse<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                FancyToast.makeText(getContext(), "Successfully upload image", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
-                                element.setPhoto(response);
-                                AppExecutors.getInstance().diskIO().execute(() -> {
-                                    categoryDao.update(element);
-                                });
-                                progressDialog.dismiss();
-                            }
+            FirebaseNetwork.obtain().upload(uri, String.format("categories/%s.jpg", element.getUid()),
+                    new NetResponse<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            FancyToast.makeText(getContext(), "Successfully upload image", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
+                            element.setPhoto(response);
+                            AppExecutors.getInstance().diskIO().execute(() -> {
+                                categoryDao.update(element);
+                            });
+                            progressDialog.dismiss();
+                        }
 
-                            @Override
-                            public void onFailure(Throwable t) {
-                                progressDialog.dismiss();
-                                FancyToast.makeText(getContext(), t.getMessage(), FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
-                            }
-                        });
-            } else {
-                progressDialog.dismiss();
-            }
+                        @Override
+                        public void onFailure(Throwable t) {
+                            progressDialog.dismiss();
+                            FancyToast.makeText(getContext(), t.getMessage(), FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
+                        }
+                    });
         }
     };
 
@@ -170,7 +165,6 @@ public class CategoryFragmentManager extends Fragment {
 
             }
         };
-
         CommonUtil.photoOptions(getContext(), function);
     }
 

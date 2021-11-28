@@ -5,7 +5,9 @@ import androidx.room.Relation;
 import com.pucmm.csti.model.Category;
 import com.pucmm.csti.model.Product;
 
-public class CategoryAndProduct {
+import java.io.Serializable;
+
+public class CategoryAndProduct  implements Serializable {
     @Embedded
     public Category category;
     @Relation(

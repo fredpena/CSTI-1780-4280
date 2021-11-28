@@ -6,6 +6,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity(tableName = "category")
 public class Category implements Serializable {
@@ -23,6 +24,10 @@ public class Category implements Serializable {
     public Category() {
     }
 
+    @Ignore
+    public Category(int uid) {
+        this.uid = uid;
+    }
 
     public int getUid() {
         return uid;
@@ -57,12 +62,20 @@ public class Category implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Category category = (Category) o;
+        return uid == category.uid;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uid);
+    }
+
+    @Override
     public String toString() {
-        return "Category{" +
-                "uid=" + uid +
-                ", name='" + name + '\'' +
-                ", active=" + active +
-                ", photo='" + photo + '\'' +
-                '}';
+        return name;
     }
 }

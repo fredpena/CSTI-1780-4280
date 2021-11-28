@@ -1,17 +1,19 @@
 package com.pucmm.csti.model;
 
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.Ignore;
-import androidx.room.PrimaryKey;
+import androidx.room.*;
+
+import java.io.Serializable;
+
+import static androidx.room.ForeignKey.CASCADE;
+
 
 @Entity(tableName = "carousel")
-public class Carousel {
+public class Carousel implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "uid")
     private int uid;
-    @ColumnInfo(name = "Product")
+    @ColumnInfo(name = "product")
     private int product;
     @ColumnInfo(name = "lineNum")
     private int lineNum;

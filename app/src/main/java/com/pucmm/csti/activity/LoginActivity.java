@@ -48,8 +48,8 @@ public class LoginActivity extends AppCompatActivity {
         session = new UserSession(getApplicationContext());
 
 
-        binding.email.setText("linleon@gmail.com");
-        //binding.email.setText("fr.pena@ce.pucmm.edu.do");
+        //binding.email.setText("linleon@gmail.com");
+        binding.email.setText("fr.pena@ce.pucmm.edu.do");
         binding.password.setText("123456");
 
         //if user wants to register

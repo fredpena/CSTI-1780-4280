@@ -12,12 +12,15 @@ public interface CategoryDao {
     //CRUD
     @Query("SELECT * FROM category ORDER BY uid")
     LiveData<List<Category>> findAll();
+//
+//    @Query("SELECT * FROM category WHERE active = 'TRUE' ORDER BY uid")
+//    List<Category> findAllActive();
 
     @Query("SELECT * FROM category WHERE uid = :uid")
     Category find(int uid);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Category category);
+    long insert(Category category);
 
     @Update
     void update(Category category);

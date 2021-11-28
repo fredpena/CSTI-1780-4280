@@ -51,7 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.rol_item, Arrays.asList("SELLER", "CUSTOMER"));
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.auto_complete_item, Arrays.asList("SELLER", "CUSTOMER"));
         binding.rol.setAdapter(adapter);
 
         binding.login.setOnClickListener(view -> {
