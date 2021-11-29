@@ -2,8 +2,13 @@ package com.pucmm.csti.ui.product;
 
 import android.app.Activity;
 import android.content.ClipData;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.*;
@@ -11,6 +16,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.AnyRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -40,8 +46,11 @@ import com.pucmm.csti.utils.ValidUtil;
 import com.shashank.sony.fancytoastlib.FancyToast;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -53,7 +62,8 @@ public class ProductFragmentManager extends Fragment {
     private static final String TAG = "ProductFragmentManager";
 
     private FragmentProductManagerBinding binding;
-    private ArrayList<Uri> arrayUri;
+    private ArrayList<Drawable> drawables;
+    private ArrayList<Uri> uris;
     private int position = 0;
     private ProductWithCarousel element;
     private ProductDao productDao;
@@ -79,7 +89,8 @@ public class ProductFragmentManager extends Fragment {
 
         element = (ProductWithCarousel) getArguments().getSerializable(Constants.PRODUCT_CAROUSEL);
         Userr user = (Userr) getArguments().getSerializable(Constants.USER);
-        arrayUri = new ArrayList<>();
+        drawables = new ArrayList<>();
+        uris = new ArrayList<>();
 
         categoryDao.findAll().observe(this, categories -> {
             final Stream<Category> stream = user.getRol().equals(Userr.ROL.CUSTOMER)
@@ -104,28 +115,32 @@ public class ProductFragmentManager extends Fragment {
             binding.active.setChecked(element.product.isActive());
 
             if (element.carousels != null && !element.carousels.isEmpty()) {
+                final KProgressHUD progressDialog = new KProgressHUDUtils(getActivity()).showDownload();
                 FirebaseNetwork.obtain().downloads(element.carousels, new NetResponse<List<Bitmap>>() {
                     @Override
                     public void onResponse(List<Bitmap> response) {
                         for (Bitmap bitmap : response) {
-                            arrayUri.add(CommonUtil.getImageUri(getContext(), bitmap));
+                            drawables.add(new BitmapDrawable(getContext().getResources(), bitmap));
                         }
-                        binding.image.setImageURI(arrayUri.get(0));
-                    }
+                        binding.image.setImageDrawable(drawables.get(0));
+                        progressDialog.dismiss();
+                     }
 
                     @Override
                     public void onFailure(Throwable t) {
                         FancyToast.makeText(getContext(), t.getMessage(), FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
+                        progressDialog.dismiss();
                     }
                 });
             }
         }
+
         binding.image.setFactory(() -> new ImageView(getContext()));
 
         // click here to select next image
         binding.next.setOnClickListener(v -> {
-            if (position < arrayUri.size() - 1) {
-                binding.image.setImageURI(arrayUri.get(++position));
+            if (position < drawables.size() - 1) {
+                binding.image.setImageDrawable(drawables.get(++position));
             } else {
                 FancyToast.makeText(getContext(), "Last Image Already Shown", FancyToast.LENGTH_SHORT, FancyToast.WARNING, false).show();
             }
@@ -134,7 +149,7 @@ public class ProductFragmentManager extends Fragment {
         // click here to view previous image
         binding.previous.setOnClickListener(v -> {
             if (position > 0) {
-                binding.image.setImageURI(arrayUri.get(--position));
+                binding.image.setImageDrawable(drawables.get(--position));
             } else {
                 FancyToast.makeText(getContext(), "First Image Already Shown", FancyToast.LENGTH_SHORT, FancyToast.WARNING, false).show();
             }
@@ -194,14 +209,14 @@ public class ProductFragmentManager extends Fragment {
 
             productDao.deleteCarousels(element.product.getItemCode());
             final List<Carousel> carousels = new ArrayList<>();
-            for (int index = 0; index < arrayUri.size(); index++) {
+            for (int index = 0; index < drawables.size(); index++) {
                 Carousel carousel = new Carousel(element.product.getItemCode(), index, String.format("products/%s/%s.jpg", element.product.getItemCode(), index));
                 carousels.add(carousel);
-                uploads.add(new CarouselUpload(arrayUri.get(index), carousel));
+                uploads.add(new CarouselUpload(uris.get(index), carousel));
             }
             productDao.insertCarousels(carousels);
 
-            if (arrayUri != null && !arrayUri.isEmpty() && element.product.getItemCode() != 0) {
+            if (drawables != null && !drawables.isEmpty() && element.product.getItemCode() != 0) {
                 function.apply(uploads).accept(progressDialog);
             } else {
                 progressDialog.dismiss();
@@ -244,20 +259,29 @@ public class ProductFragmentManager extends Fragment {
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == Activity.RESULT_OK) {
-                        final ClipData clipData = result.getData().getClipData();
-                        if (clipData != null) {
-                            for (int i = 0; i < clipData.getItemCount(); i++) {
-                                // adding imageuri in array
-                                final Uri uri = clipData.getItemAt(i).getUri();
-                                arrayUri.add(uri);
+                        try {
+                            final ClipData clipData = result.getData().getClipData();
+                            if (clipData != null) {
+                                for (int i = 0; i < clipData.getItemCount(); i++) {
+                                    // adding imageuri in array
+                                    final Uri uri = clipData.getItemAt(i).getUri();
+                                    final InputStream inputStream = getActivity().getContentResolver().openInputStream(uri);
+                                    final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                                    drawables.add(new BitmapDrawable(getContext().getResources(), bitmap));
+                                    uris.add(uri);
+                                }
+                            } else {
+                                final Uri uri = result.getData().getData();
+                                final InputStream inputStream = getActivity().getContentResolver().openInputStream(uri);
+                                final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                                drawables.add(new BitmapDrawable(getContext().getResources(), bitmap));
+                                uris.add(uri);
                             }
-                            // setting 1st selected image into image switcher
-                        } else {
-                            Uri uri = result.getData().getData();
-                            arrayUri.add(uri);
+                            binding.image.setImageDrawable(drawables.get(0));
+                            position = 0;
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
                         }
-                        binding.image.setImageURI(arrayUri.get(0));
-                        position = 0;
                     }
                 }
             });

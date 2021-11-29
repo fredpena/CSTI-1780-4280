@@ -26,6 +26,8 @@
     <string name="please_wait">Please Wait</string>
     <string name="authenticating">Authenticating...</string>
     <string name="connecting">Connecting...</string>
+    <string name="download">Download...</string>
+    <string name="upload">Upload...</string>
 
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>

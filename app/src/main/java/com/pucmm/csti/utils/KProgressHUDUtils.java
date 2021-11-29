@@ -21,7 +21,28 @@ public class KProgressHUDUtils {
                 .setAnimationSpeed(2)
                 .setDimAmount(0.5f)
                 .show();
+    }
 
+    public KProgressHUD showDownload() {
+        return KProgressHUD.create(context)
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setLabel(context.getString(R.string.please_wait))
+                .setDetailsLabel(context.getString(R.string.download))
+                .setCancellable(false)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f)
+                .show();
+    }
+
+    public KProgressHUD showUpload() {
+        return KProgressHUD.create(context)
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setLabel(context.getString(R.string.please_wait))
+                .setDetailsLabel(context.getString(R.string.upload))
+                .setCancellable(false)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f)
+                .show();
     }
 
     public KProgressHUD showAuthenticating() {
@@ -33,6 +54,5 @@ public class KProgressHUDUtils {
                 .setAnimationSpeed(2)
                 .setDimAmount(0.5f)
                 .show();
-
     }
 }

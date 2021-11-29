@@ -9,14 +9,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.pucmm.csti.databinding.ItemProductBinding;
 import com.pucmm.csti.listener.OptionsMenuListener;
+import com.pucmm.csti.model.Carousel;
 import com.pucmm.csti.model.Product;
 import com.pucmm.csti.model.Userr;
 import com.pucmm.csti.model.relationships.ProductWithCarousel;
+import com.pucmm.csti.utils.CommonUtil;
 import com.pucmm.csti.utils.FormattedUtil;
 import com.pucmm.csti.utils.ProductUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ProductAdaptor extends RecyclerView.Adapter<ProductAdaptor.MyViewHolder> {
     private static final String TAG = "ProductAdaptor";
@@ -58,6 +61,16 @@ public class ProductAdaptor extends RecyclerView.Adapter<ProductAdaptor.MyViewHo
                 optionsMenuListener.onCreateOptionsMenu(holder.action, element);
             }
         });
+
+        if (element.carousels != null && !element.carousels.isEmpty()) {
+            Optional<Carousel> optional = element.carousels.stream()
+                    .sorted((a1, a2) -> Integer.valueOf(a1.getLineNum()).compareTo(a2.getLineNum()))
+                    .findFirst();
+
+            if (optional.isPresent()) {
+                CommonUtil.downloadImage(optional.get().getPhoto(), binding.avatar);
+            }
+        }
     }
 
 
@@ -68,6 +81,7 @@ public class ProductAdaptor extends RecyclerView.Adapter<ProductAdaptor.MyViewHo
         }
         return elements.size();
     }
+
     public void setElements(List<ProductWithCarousel> elements) {
         this.elements = elements;
         notifyDataSetChanged();
