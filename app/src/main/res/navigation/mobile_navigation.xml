@@ -20,6 +20,10 @@
         <action
                 android:id="@+id/action_nav_category_to_nav_category_man"
                 app:destination="@id/nav_category_man"/>
+
+        <action
+                android:id="@+id/action_nav_category_to_nav_product"
+                app:destination="@id/nav_product"/>
     </fragment>
 
     <fragment
@@ -39,9 +43,19 @@
             android:label="@string/menu_product"
             tools:layout="@layout/fragment_product">
 
+        <argument
+                android:name="CATEGORY"
+                app:argType="com.pucmm.csti.model.Category"
+                app:nullable="true"
+                android:defaultValue="@null" />
+
         <action
                 android:id="@+id/action_nav_product_to_nav_product_man"
                 app:destination="@id/nav_product_man"/>
+
+        <action
+                android:id="@+id/action_nav_product_to_nav_product_details"
+                app:destination="@id/nav_product_details"/>
     </fragment>
 
     <fragment
@@ -52,6 +66,14 @@
         <action
                 android:id="@+id/action_nav_product_man_to_nav_product"
                 app:destination="@id/nav_product"/>
+
+    </fragment>
+
+    <fragment
+            android:id="@+id/nav_product_details"
+            android:name="com.pucmm.csti.ui.product.ProductFragmentDetails"
+            tools:layout="@layout/fragment_product_details">
+
 
     </fragment>
 

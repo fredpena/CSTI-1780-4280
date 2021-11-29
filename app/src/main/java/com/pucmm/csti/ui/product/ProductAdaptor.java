@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.pucmm.csti.databinding.ItemProductBinding;
+import com.pucmm.csti.listener.OnItemTouchListener;
 import com.pucmm.csti.listener.OptionsMenuListener;
 import com.pucmm.csti.model.Carousel;
 import com.pucmm.csti.model.Product;
@@ -28,6 +29,7 @@ public class ProductAdaptor extends RecyclerView.Adapter<ProductAdaptor.MyViewHo
     private List<ProductWithCarousel> elements;
     private ItemProductBinding binding;
     private OptionsMenuListener optionsMenuListener;
+    private OnItemTouchListener onItemTouchListener;
 
     public ProductAdaptor(Userr user) {
         this.user = user;
@@ -62,6 +64,31 @@ public class ProductAdaptor extends RecyclerView.Adapter<ProductAdaptor.MyViewHo
             }
         });
 
+        holder.avatar.setOnClickListener(v -> {
+            if (onItemTouchListener != null) {
+                onItemTouchListener.onClick(element);
+            }
+        });
+
+        holder.itemCode.setOnClickListener(v -> {
+            if (onItemTouchListener != null) {
+                onItemTouchListener.onClick(element);
+            }
+        });
+
+        holder.itemName.setOnClickListener(v -> {
+            if (onItemTouchListener != null) {
+                onItemTouchListener.onClick(element);
+            }
+        });
+
+        holder.price.setOnClickListener(v -> {
+            if (onItemTouchListener != null) {
+                onItemTouchListener.onClick(element);
+            }
+        });
+
+
         if (element.carousels != null && !element.carousels.isEmpty()) {
             Optional<Carousel> optional = element.carousels.stream()
                     .sorted((a1, a2) -> Integer.valueOf(a1.getLineNum()).compareTo(a2.getLineNum()))
@@ -89,6 +116,10 @@ public class ProductAdaptor extends RecyclerView.Adapter<ProductAdaptor.MyViewHo
 
     public void setOptionsMenuListener(OptionsMenuListener optionsMenuListener) {
         this.optionsMenuListener = optionsMenuListener;
+    }
+
+    public void setOnItemTouchListener(OnItemTouchListener onItemTouchListener) {
+        this.onItemTouchListener = onItemTouchListener;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

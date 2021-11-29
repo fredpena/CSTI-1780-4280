@@ -71,6 +71,43 @@ public class FirebaseNetwork {
                 .addOnProgressListener(taskSnapshot -> Log.i(TAG, "upload:onProgress"));
     }
 
+    public void download(final String key, final NetResponse<Bitmap> response) {
+        final StorageReference reference = getStorage().getReferenceFromUrl(URL_DOWNLOAD + key);
+
+        reference.getBytes(ONE_MEGABYTE)
+                .addOnSuccessListener(bytes -> {
+                    Log.i(TAG, "download:onSuccess");
+                    final Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    response.onResponse(bitmap);
+                })
+                .addOnCanceledListener(() -> Log.i(TAG, "download:onCanceled"))
+                .addOnCompleteListener(task -> Log.i(TAG, "download:onComplete"))
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "download:onFailure");
+                    response.onFailure(e);
+                });
+    }
+
+    public void deletes(final List<Carousel> carousels, final NetResponse<String> response) {
+        AtomicInteger atomic = new AtomicInteger(carousels.size());
+        for (Carousel carousel : carousels) {
+            final StorageReference reference = getStorageReference().child(PATH_UPLOAD + carousel.getPhoto());
+
+            reference.delete()
+                    .addOnSuccessListener(aVoid -> {
+                        Log.i(TAG, "delete:onSuccess");
+                        if (atomic.decrementAndGet() == 0) {
+                            response.onResponse("Successfully deleted on Firebase");
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e(TAG, "delete:onFailure");
+                        response.onFailure(e);
+                    })
+                    .addOnCompleteListener(task -> Log.i(TAG, "delete:onComplete"))
+                    .addOnCanceledListener(() -> Log.i(TAG, "delete:onCanceled"));
+        }
+    }
 
     public void downloads(final List<Carousel> carousels, final NetResponse<List<Bitmap>> response) {
         AtomicInteger atomic = new AtomicInteger(carousels.size());
@@ -118,20 +155,5 @@ public class FirebaseNetwork {
         }
     }
 
-    public void download(final String key, final NetResponse<Bitmap> response) {
-        final StorageReference reference = getStorage().getReferenceFromUrl(URL_DOWNLOAD + key);
 
-        reference.getBytes(ONE_MEGABYTE)
-                .addOnSuccessListener(bytes -> {
-                    Log.i(TAG, "download:onSuccess");
-                    final Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                    response.onResponse(bitmap);
-                })
-                .addOnCanceledListener(() -> Log.i(TAG, "download:onCanceled"))
-                .addOnCompleteListener(task -> Log.i(TAG, "download:onComplete"))
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "download:onFailure");
-                    response.onFailure(e);
-                });
-    }
 }

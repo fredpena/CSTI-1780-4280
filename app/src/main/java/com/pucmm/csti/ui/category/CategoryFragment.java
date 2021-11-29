@@ -18,6 +18,7 @@ import com.pucmm.csti.databinding.FragmentCategoryBinding;
 import com.pucmm.csti.database.AppDataBase;
 import com.pucmm.csti.database.AppExecutors;
 import com.pucmm.csti.database.CategoryDao;
+import com.pucmm.csti.listener.OnItemTouchListener;
 import com.pucmm.csti.listener.OptionsMenuListener;
 import com.pucmm.csti.model.Category;
 import com.pucmm.csti.model.Userr;
@@ -108,6 +109,14 @@ public class CategoryFragment extends Fragment {
                         "You are about to delete record. Do you really want to proceed?",
                         () -> delete(element));
             });
+        });
+
+        adapter.setOnItemTouchListener((OnItemTouchListener<Category>) element -> {
+            final Bundle bundle = new Bundle();
+            bundle.putSerializable(Constants.CATEGORY, element);
+
+            NavHostFragment.findNavController(CategoryFragment.this)
+                    .navigate(R.id.action_nav_category_to_nav_product, bundle);
         });
 
         CategoryViewModel categoryViewModel = new ViewModelProvider(this, new ViewModelFactory(getContext()))

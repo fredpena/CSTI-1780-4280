@@ -1,5 +1,6 @@
 package com.pucmm.csti.utils;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -15,4 +16,5 @@ public final class SystemProperties {
 
         return options;
     }
+
 }

@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.pucmm.csti.databinding.ItemCategoryBinding;
+import com.pucmm.csti.listener.OnItemTouchListener;
 import com.pucmm.csti.listener.OptionsMenuListener;
 import com.pucmm.csti.model.Category;
 import com.pucmm.csti.model.Userr;
@@ -25,6 +26,7 @@ public class CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.MyView
     private List<Category> elements;
     private ItemCategoryBinding binding;
     private OptionsMenuListener optionsMenuListener;
+    private OnItemTouchListener onItemTouchListener;
 
     public CategoryAdaptor(Userr user) {
         this.user = user;
@@ -56,6 +58,19 @@ public class CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.MyView
             }
         });
 
+        holder.avatar.setOnClickListener(v -> {
+            if (onItemTouchListener != null) {
+                onItemTouchListener.onClick(element);
+            }
+        });
+
+        holder.name.setOnClickListener(v -> {
+            if (onItemTouchListener != null) {
+                onItemTouchListener.onClick(element);
+            }
+        });
+
+
         CommonUtil.downloadImage(element.getPhoto(), binding.avatar);
 
     }
@@ -75,6 +90,10 @@ public class CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.MyView
 
     public void setOptionsMenuListener(OptionsMenuListener optionsMenuListener) {
         this.optionsMenuListener = optionsMenuListener;
+    }
+
+    public void setOnItemTouchListener(OnItemTouchListener onItemTouchListener) {
+        this.onItemTouchListener = onItemTouchListener;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
